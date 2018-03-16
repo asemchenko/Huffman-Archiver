@@ -11,7 +11,8 @@
 
 class SymbolInStream {
 public:
-    explicit SymbolInStream(const std::string &fileName);
+    enum ioDirect { inStream, outStream};
+    SymbolInStream(const std::string &fileName, ioDirect direction);
 
     bool isOpen() const;
 
@@ -19,8 +20,13 @@ public:
 
     Symbol readSymbol();
 
+    bool writeSymbol(Symbol s);
+
 private:
-    std::ifstream file;
+
+    std::fstream file;
+    uint8_t buffer;
+    size_t bufferBitSize;
 };
 
 

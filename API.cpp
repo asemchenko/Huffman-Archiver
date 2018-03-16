@@ -26,7 +26,7 @@ static unordered_map<Symbol, uint64_t, Symbol::Hash> symbolsOccurrence(SymbolInS
 
 
 bool compressFile(const std::string &filename) {
-    SymbolInStream in(filename);
+    SymbolInStream in(filename, SymbolInStream::inStream);
     if (!in.isOpen()) {
         std::cerr << "Error in opening file " << filename << std::endl;
     }

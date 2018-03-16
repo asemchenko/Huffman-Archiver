@@ -31,9 +31,22 @@ public:
         value <<= 1;
         value |= (bit ? 1 : 0);
     }
-    std::string binaryRepresentation() const {
-        return std::bitset<64>(value).to_string().substr(64-bitSize, bitSize);
+
+    inline size_t size() const {
+        return bitSize;
     }
+
+    uint8_t popBits(size_t count) {
+        // count must be less or equal 8
+        // Symbol.size() must be greater or equal count
+        bitSize -= count;
+        return static_cast<uint8_t >(value >> count);
+    }
+
+    std::string binaryRepresentation() const {
+        return std::bitset<64>(value).to_string().substr(64 - bitSize, bitSize);
+    }
+
     struct Hash {
         std::size_t operator()(const Symbol &s) const noexcept {
             return s.value;

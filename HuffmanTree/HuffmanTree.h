@@ -22,13 +22,14 @@ public:
             if(p->right) {
                 r = postorder(p->right, indent+6);
             }
-            if (indent) {
+/*            if (indent) {
                 std::cout << std::setw(indent) << ' ';
             }
             if (p->right) std::cout<<" /\n" << std::setw(indent) << ' ';
             std::cout<< (p->isLeaf?p->symbol.getCode():p->countOccur) << "\n ";
+*/
             if(p->left) {
-                std::cout << std::setw(indent) << ' ' <<" \\\n";
+//                std::cout << std::setw(indent) << ' ' <<" \\\n";
                 l = postorder(p->left, indent+6);
             }
             return std::max(l+1, r+1);
