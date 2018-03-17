@@ -3,7 +3,7 @@ project(SymbolStreamTests)
 
 find_package(GTest REQUIRED)
 find_package(Threads REQUIRED)
-add_executable(streamTest tests.cpp ../SymbolStream.cpp)
+add_executable(streamTest tests.cpp ../SymbolStream.cpp ../../Symbol/Symbol.cpp)
 target_link_libraries(streamTest ${GTEST_LIBRARIES} Threads::Threads gtest_main)
 # copying data for tests
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/uniqBytes.bin"

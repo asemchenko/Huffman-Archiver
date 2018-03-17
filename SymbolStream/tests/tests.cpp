@@ -7,7 +7,7 @@
 
 TEST(InStreamTest, openingUnexistingFile) {
     SymbolStream s;
-    ASSERT_THROW(s.open("noSuchFile", SymbolStream::inStream), std::fstream::failure);
+    ASSERT_THROW(s.open("noSuchFile", SymbolStream::inStream), std::runtime_error);
 }
 
 TEST(InStreamTest, readingBits) {
@@ -15,8 +15,6 @@ TEST(InStreamTest, readingBits) {
     for (int i = 0; i < 256; ++i) {
         ASSERT_EQ(s.readSymbol().getCode(), i);
     }
-    // testing reading for ended file
-    ASSERT_THROW(s.readSymbol(), std::fstream::failure);
 }
 
 TEST(OutStreamTest, writingBits) {
@@ -27,7 +25,7 @@ TEST(OutStreamTest, writingBits) {
     }
     // writing 62 bytes 0xff
     for (int j = 0; j < 32; ++j) {
-        out.writeSymbol(Symbol(0xffffffff, j));
+        out.writeSymbol(Symbol(0xffffffff, static_cast<size_t>(j)));
     }
     out.close();
     // must read 63 bytes 0xff
@@ -35,5 +33,4 @@ TEST(OutStreamTest, writingBits) {
     for (int k = 0; k < 63; ++k) {
         ASSERT_EQ(in.readSymbol().getCode(), 0xff);
     }
-    ASSERT_THROW(in.readSymbol(), std::ifstream::failure);
 }

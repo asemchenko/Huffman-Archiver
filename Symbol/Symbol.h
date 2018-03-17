@@ -12,45 +12,26 @@
 
 class Symbol {
 public:
-    explicit Symbol(uint8_t v) : value(v), bitSize(8) {}
+    explicit Symbol(uint8_t v);
 
-    explicit Symbol(uint64_t v, size_t bitSize_) : value(v), bitSize(bitSize_) {}
+    explicit Symbol(uint64_t v, size_t bitSize_);
 
-    Symbol() {}
+    Symbol() = default;
 
-    inline uint64_t getCode() const {
-        return value;
-    }
+    uint64_t getCode() const;
 
-    bool operator==(const Symbol &s) const noexcept {
-        return value == s.value;
-    }
+    bool operator==(const Symbol &s) const noexcept ;
 
-    void append(bool bit) {
-        ++bitSize;
-        value <<= 1;
-        value |= (bit ? 1 : 0);
-    }
+    void append(bool bit);
 
-    inline size_t size() const {
-        return bitSize;
-    }
+    size_t size() const;
 
-    uint8_t popBits(size_t count) {
-        // count must be less or equal 8
-        // Symbol.size() must be greater or equal count
-        bitSize -= count;
-        return static_cast<uint8_t >(value >> count);
-    }
+    uint8_t popBits(size_t count);
 
-    std::string binaryRepresentation() const {
-        return std::bitset<64>(value).to_string().substr(64 - bitSize, bitSize);
-    }
+    std::string binaryRepresentation() const;
 
     struct Hash {
-        std::size_t operator()(const Symbol &s) const noexcept {
-            return s.value;
-        }
+        std::size_t operator()(const Symbol &s) const noexcept;
     };
 
 private:

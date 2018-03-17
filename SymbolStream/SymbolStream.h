@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <cstring>
+#include <sstream>
 #include "../Symbol/Symbol.h"
 
 class SymbolStream {
@@ -15,11 +16,11 @@ public:
         inStream, outStream
     };
 
-    SymbolStream(const std::string &fileName, ioDirect direction);
+    SymbolStream(const std::string &fileName, ioDirect streamDirection);
 
     SymbolStream();
 
-    bool open(const std::string &fileName, ioDirect direction);
+    bool open(const std::string &fileName, ioDirect streamDirection);
 
     bool isOpen() const;
 
@@ -28,6 +29,8 @@ public:
     Symbol readSymbol();
 
     bool writeSymbol(Symbol s);
+
+    void seekg(size_t pos);
     
     void flush();
     
