@@ -7,7 +7,7 @@
 
 #include <string>
 #include <iostream>
-#include "SymbolInStream/SymbolInStream.h"
+#include "SymbolStream/SymbolStream.h"
 
 bool compressFile(const std::string &filename);
 

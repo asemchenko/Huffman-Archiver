@@ -8,17 +8,13 @@
 #include "HuffmanTree/HuffmanTree.h"
 using std::unordered_map;
 
-static unordered_map<Symbol, uint64_t, Symbol::Hash> symbolsOccurrence(SymbolInStream &stream) {
+static unordered_map<Symbol, uint64_t, Symbol::Hash> symbolsOccurrence(SymbolStream &stream) {
     unordered_map<Symbol , uint64_t, Symbol::Hash> symbolsCount;
     symbolsCount.reserve(256);
     Symbol s;
     s = stream.readSymbol();
     while (stream.good()) {
-        if (symbolsCount.count(s)) {
-            symbolsCount.at(s) += 1;
-        } else {
-            symbolsCount.insert({s, 1});
-        }
+        symbolsCount[s] += 1;
         s = stream.readSymbol();
     }
     return symbolsCount;
@@ -26,7 +22,7 @@ static unordered_map<Symbol, uint64_t, Symbol::Hash> symbolsOccurrence(SymbolInS
 
 
 bool compressFile(const std::string &filename) {
-    SymbolInStream in(filename, SymbolInStream::inStream);
+    SymbolStream in(filename, SymbolStream::inStream);
     if (!in.isOpen()) {
         std::cerr << "Error in opening file " << filename << std::endl;
     }

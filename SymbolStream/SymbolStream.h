@@ -9,10 +9,17 @@
 #include <cstring>
 #include "../Symbol/Symbol.h"
 
-class SymbolInStream {
+class SymbolStream {
 public:
-    enum ioDirect { inStream, outStream};
-    SymbolInStream(const std::string &fileName, ioDirect direction);
+    enum ioDirect {
+        inStream, outStream
+    };
+
+    SymbolStream(const std::string &fileName, ioDirect direction);
+
+    SymbolStream();
+
+    bool open(const std::string &fileName, ioDirect direction);
 
     bool isOpen() const;
 
@@ -21,9 +28,15 @@ public:
     Symbol readSymbol();
 
     bool writeSymbol(Symbol s);
+    
+    void flush();
+    
+    void close();
+    
+    ~SymbolStream();
 
 private:
-
+    ioDirect direction;
     std::fstream file;
     uint8_t buffer;
     size_t bufferBitSize;

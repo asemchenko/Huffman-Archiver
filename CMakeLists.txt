@@ -4,11 +4,9 @@ set(CMAKE_CXX_STANDARD 14)
 # enable testing
 enable_testing()
 # adding tests for SymbolStream
-add_subdirectory(SymbolInStream/tests)
-add_test(streamTest SymbolInStream/tests/streamTest)
-
+add_subdirectory(SymbolStream/tests)
 add_executable(huffmanArchiver main.cpp
-        SymbolInStream/SymbolInStream.cpp SymbolInStream/SymbolInStream.h
+        SymbolStream/SymbolStream.cpp SymbolStream/SymbolStream.h
         Symbol/Symbol.h
         API.h API.cpp
         HuffmanTreeNode/HuffmanTreeNode.cpp HuffmanTreeNode/HuffmanTreeNode.h
