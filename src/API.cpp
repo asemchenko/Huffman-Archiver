@@ -24,16 +24,18 @@ bool compressFile(const std::string &inFilename, const std::string &outFilename)
     SymbolStream in(inFilename, SymbolStream::inStream);
     //  counting symbols occurrence
     auto occurrence = symbolsOccurrence(in);
-/*    for (const auto &i : occurrence) {
-    printf("Symbol %u: %lu\n", static_cast<unsigned>(i.first.getCode()), i.second);
-    }*/
     HuffmanTree tree(occurrence);
-/*    int height = tree.postorder(tree.getRoot(), 0);
-    std::cout << "Tree height: " << height-1 << std::endl;*/
     auto codeTable = tree.buildCodeTable();
-/*    for (auto &i : codeTable) {
+#ifdef DEBUG
+    for (const auto &i : occurrence) {
+        printf("Symbol %u: %lu\n", static_cast<unsigned>(i.first.getCode()), i.second);
+    }
+    int height = tree.postorder(tree.getRoot(), 0);
+    std::cout << "Tree height: " << height-1 << std::endl;
+    for (auto &i : codeTable) {
         std::cout << "Symbol " << i.first.getCode() << " has code " << i.second.binaryRepresentation() << std::endl;
-    }*/
+    }
+#endif
     in.seekg(0); // rewind stream at the begin
     Symbol s = in.readSymbol();
     SymbolStream out(outFilename, SymbolStream::outStream);

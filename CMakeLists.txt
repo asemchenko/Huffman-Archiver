@@ -13,6 +13,10 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
     # adding tests for SymbolStream
     add_compile_options("-O3")
 endif ()
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("*********************** DEBUG CONFIGURATION ***************************")
+    add_definitions(-DDEBUG)
+endif ()
 add_executable(huffmanArchiver
         ${SOURCE_DIR}main.cpp
         ${SOURCE_DIR}SymbolStream/SymbolStream.cpp

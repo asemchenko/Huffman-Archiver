@@ -8,12 +8,14 @@
 #include <vector>
 #include <unordered_map>
 #include "../HuffmanTreeNode/HuffmanTreeNode.h"
+#include "../SymbolStream/SymbolStream.h"
 
 #include <iostream>
 #include <iomanip>
 class HuffmanTree {
 public:
-    explicit HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence);
+    HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence);
+    HuffmanTree(SymbolStream &dumpSource);
     std::unordered_map<Symbol, Symbol, Symbol::Hash> buildCodeTable() const;
     ~HuffmanTree();
     int postorder(HuffmanTreeNode* p, int indent) {
@@ -38,12 +40,14 @@ public:
     inline HuffmanTreeNode *getRoot() {
         return root;
     }
+    void dump(SymbolStream &destination);
 private:
     static bool cmp(const HuffmanTreeNode *a, const HuffmanTreeNode *b);
     void addToCodeTable(HuffmanTreeNode* root, Symbol s,
                        std::unordered_map<Symbol, Symbol, Symbol::Hash> &codeTable) const;
     std::vector<HuffmanTreeNode*>
     buildHeap(std::unordered_map<Symbol, uint64_t, Symbol::Hash> occurrence);
+    void dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> leafs, std::vector<Symbol> codes);
     HuffmanTreeNode *root;
     size_t symbolsCount;
 };

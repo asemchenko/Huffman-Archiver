@@ -3,12 +3,14 @@
 //
 #include <algorithm>
 #include "HuffmanTree.h"
+const Symbol TREE_DUMP_DOWN_CODE = Symbol(0,1);
+const Symbol TREE_DUMP_UP_CODE = Symbol(1,1);
 
 bool HuffmanTree::cmp(const HuffmanTreeNode *a, const HuffmanTreeNode *b) {
     return a->countOccur > b->countOccur;
 }
-
 HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence) {
+    // todo fix bug with only one element in occurrence ------------------------------ ↑
     symbolsCount = occurrence.size();
     //building tree
     auto heap = buildHeap(occurrence);
@@ -63,4 +65,35 @@ std::unordered_map<Symbol, Symbol, Symbol::Hash> HuffmanTree::buildCodeTable() c
     Symbol startSymbol(0, 0);
     addToCodeTable(root, startSymbol, codeTable);
     return codeTable;
+}
+
+void HuffmanTree::dump(SymbolStream &destination) {
+    std::vector<Symbol> leafs;
+    std::vector<Symbol> codes;
+    dumpSubtree(root, leafs, codes);
+    // writing header entry - codes count
+    destination.writeSymbol(Symbol(codes.size(), 64));
+    // writing header entry - leafs count
+    // writing codes
+    for (auto code:codes) {
+        destination.writeSymbol(code);
+    }
+    // writing leafs
+    for(auto leaf: leafs) {
+        destination.writeSymbol(leaf);
+    }
+}
+
+void HuffmanTree::dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> leafs, std::vector<Symbol> codes) {
+    if(treeRoot->isLeaf) {
+        leafs.push_back(treeRoot->symbol);
+        codes.push_back(TREE_DUMP_UP_CODE);
+    } else {
+        dumpSubtree(treeRoot->left, leafs, codes);
+        dumpSubtree(treeRoot->right, leafs, codes);
+    }
+}
+
+HuffmanTree::HuffmanTree(SymbolStream &dumpSource) {
+    // todo implement me
 }
