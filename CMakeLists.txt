@@ -10,9 +10,11 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
     add_subdirectory(SymbolStream/tests)
     add_compile_options("-O3")
 endif ()
-add_executable(huffmanArchiver main.cpp
-        SymbolStream/SymbolStream.cpp SymbolStream/SymbolStream.h
-        Symbol/Symbol.h Symbol/Symbol.cpp
-        API.h API.cpp
-        HuffmanTreeNode/HuffmanTreeNode.cpp HuffmanTreeNode/HuffmanTreeNode.h
-        HuffmanTree/HuffmanTree.cpp HuffmanTree/HuffmanTree.h)
+add_compile_options("-pg")
+set(SOURCE_DIR src/)
+add_executable(huffmanArchiver ${SOURCE_DIR}main.cpp
+        ${SOURCE_DIR}SymbolStream/SymbolStream.cpp
+        ${SOURCE_DIR}Symbol/Symbol.cpp
+        ${SOURCE_DIR}API.cpp
+        ${SOURCE_DIR}HuffmanTreeNode/HuffmanTreeNode.cpp
+        ${SOURCE_DIR}HuffmanTree/HuffmanTree.cpp)
