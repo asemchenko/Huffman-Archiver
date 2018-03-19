@@ -20,9 +20,7 @@ public:
 
     SymbolStream();
 
-    bool open(const std::string &fileName, ioDirect streamDirection);
-
-    bool isOpen() const;
+    void open(const std::string &fileName, ioDirect streamDirection);
 
     bool good() const;
 
@@ -38,9 +36,13 @@ public:
     
     ~SymbolStream();
 
+    SymbolStream(SymbolStream &) = delete;
+    SymbolStream(SymbolStream &&) = delete;
+    void operator = (SymbolStream &) = delete;
+    void operator = (SymbolStream &&) = delete;
 private:
     ioDirect direction;
-    std::fstream file;
+    FILE *file;
     uint8_t buffer;
     size_t bufferBitSize;
 };

@@ -9,49 +9,47 @@ SymbolStream::SymbolStream(const std::string &fileName, ioDirect streamDirection
     open(fileName, streamDirection);
 }
 
-SymbolStream::SymbolStream() = default;
+SymbolStream::SymbolStream() {
+    file = nullptr;
+}
 
-bool SymbolStream::open(const std::string &fileName, SymbolStream::ioDirect streamDirection) {
+void SymbolStream::open(const std::string &fileName, SymbolStream::ioDirect streamDirection) {
     direction = streamDirection;
     if (streamDirection == inStream) {
-        file.open(fileName, std::ios_base::in | std::ios_base::binary);
+        file = fopen(fileName.c_str(), "rb");
     } else {
-        file.open(fileName, std::ios_base::out | std::ios_base::binary);
+        file = fopen(fileName.c_str(), "wb");
         bufferBitSize = 0;
         buffer = 0;
     }
-    if (!file.is_open()) {
+    if (!file || ferror(file)) {
         throw std::runtime_error("Can not open file " + fileName);
     }
-    return file.is_open();
-}
-
-bool SymbolStream::isOpen() const {
-    return file.is_open();
 }
 
 bool SymbolStream::good() const {
-    return file.good();
+    return !feof(file) && !static_cast<bool>(ferror(file));
 }
 
 Symbol SymbolStream::readSymbol() {
-    char s;
+    uint8_t s;
     // potential problem - casting from uint8_t to char
-    file.get(s);
-    return Symbol(static_cast<uint8_t>(s));
+    fread(&s, sizeof(uint8_t), 1, file);
+    return Symbol(s);
 }
 
 bool SymbolStream::writeSymbol(Symbol s) {
     // buffer addition up to 8 bits
     if (bufferBitSize && s.size() >= (8 - bufferBitSize)) {
         buffer |= s.popBits(8 - bufferBitSize);
-        file.put(buffer);
+        fwrite(&buffer, sizeof(buffer), 1, file);
         bufferBitSize = 0;
         buffer = 0;
     }
     // writing remained symbol bits
     while (s.size() >= 8) {
-        file.put(s.popBits(8));
+        uint8_t bits = s.popBits(8);
+        fwrite(&bits, sizeof(bits), 1, file);
     }
     size_t symbolSize = s.size();
     if (symbolSize) {
@@ -66,7 +64,7 @@ void SymbolStream::flush() {
         throw std::logic_error("Attempt flushing input stream");
     }
     else if (bufferBitSize) {
-        file.put(buffer);
+        fflush(file);
     }
 }
 
@@ -78,12 +76,13 @@ void SymbolStream::close() {
     if (direction == outStream) {
         flush();
     }
-    if (file.is_open()) {
-        file.close();
+    if (file) {
+        fclose(file);
+        file = nullptr;
     }
 }
 
 void SymbolStream::seekg(size_t pos) {
-    file.clear();
-    file.seekg(pos);
+    clearerr(file);
+    fseek(file, 0, SEEK_SET);
 }
