@@ -9,9 +9,14 @@ const Symbol TREE_DUMP_UP_CODE = Symbol(1,1);
 bool HuffmanTree::cmp(const HuffmanTreeNode *a, const HuffmanTreeNode *b) {
     return a->countOccur > b->countOccur;
 }
-HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence) {
-    // todo fix bug with only one element in occurrence ------------------------------ ↑
+HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence):
+                                                                                root(nullptr) {
     symbolsCount = occurrence.size();
+    if (symbolsCount == 1) {
+        // if file contains bytes with only one value
+        // we can not build tree
+        throw std::logic_error("Sorry, this file can not be compressed");
+    }
     //building tree
     auto heap = buildHeap(occurrence);
     int iterCount = static_cast<int>(heap.size()) - 1;
@@ -42,7 +47,9 @@ HuffmanTree::buildHeap(std::unordered_map<Symbol, uint64_t, Symbol::Hash> occurr
 }
 
 HuffmanTree::~HuffmanTree() {
-    delete root;
+    if (root) {
+        delete root;
+    }
 }
 
 void HuffmanTree::addToCodeTable(HuffmanTreeNode *root, Symbol code,
@@ -89,6 +96,7 @@ void HuffmanTree::dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> lea
         leafs.push_back(treeRoot->symbol);
         codes.push_back(TREE_DUMP_UP_CODE);
     } else {
+        codes.push_back(TREE_DUMP_DOWN_CODE);
         dumpSubtree(treeRoot->left, leafs, codes);
         dumpSubtree(treeRoot->right, leafs, codes);
     }

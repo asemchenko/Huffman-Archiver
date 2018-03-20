@@ -14,8 +14,8 @@
 #include <iomanip>
 class HuffmanTree {
 public:
-    HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence);
-    HuffmanTree(SymbolStream &dumpSource);
+    explicit HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence);
+    explicit HuffmanTree(SymbolStream &dumpSource);
     std::unordered_map<Symbol, Symbol, Symbol::Hash> buildCodeTable() const;
     ~HuffmanTree();
     int postorder(HuffmanTreeNode* p, int indent) {

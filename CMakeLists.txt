@@ -7,6 +7,7 @@ set(SOURCE_DIR src/)
 
 enable_testing()
 add_subdirectory(${SOURCE_DIR}SymbolStream/tests)
+add_subdirectory(${SOURCE_DIR}HuffmanTree/tests)
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
     message("*********************** RELEASE CONFIGURATION ***************************")
     # enable testing
