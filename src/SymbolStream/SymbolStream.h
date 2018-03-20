@@ -8,33 +8,29 @@
 #include <fstream>
 #include <cstring>
 #include <sstream>
-#include "../Symbol/Symbol.h"
+#include "SymbolStreamInterface.h"
 
-class SymbolStream {
+class SymbolStream: public SymbolStreamInterface {
 public:
-    enum ioDirect {
-        inStream, outStream
-    };
-
     SymbolStream(const std::string &fileName, ioDirect streamDirection);
 
     SymbolStream();
 
-    void open(const std::string &fileName, ioDirect streamDirection);
+    void open(const std::string &fileName, ioDirect streamDirection) final ;
 
-    bool good() const;
+    bool good() const final ;
 
-    Symbol readSymbol();
+    Symbol readSymbol() final;
 
-    bool writeSymbol(Symbol s);
+    bool writeSymbol(Symbol s) final;
 
-    void seekg(size_t pos);
+    void seekg(size_t pos) final;
     
-    void flush();
+    void flush() final;
     
-    void close();
+    void close() final;
     
-    ~SymbolStream();
+    ~SymbolStream() final;
 
     SymbolStream(SymbolStream &) = delete;
     SymbolStream(SymbolStream &&) = delete;

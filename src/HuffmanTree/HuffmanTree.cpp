@@ -11,13 +11,14 @@ bool HuffmanTree::cmp(const HuffmanTreeNode *a, const HuffmanTreeNode *b) {
 }
 HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence):
                                                                                 root(nullptr) {
+    // todo refactor lines below - create method for building tree
     symbolsCount = occurrence.size();
     if (symbolsCount == 1) {
         // if file contains bytes with only one value
         // we can not build tree
         throw std::logic_error("Sorry, this file can not be compressed");
     }
-    //building tree
+    // building tree
     auto heap = buildHeap(occurrence);
     int iterCount = static_cast<int>(heap.size()) - 1;
     for (int i = 0; i < iterCount; ++i) {
@@ -74,20 +75,20 @@ std::unordered_map<Symbol, Symbol, Symbol::Hash> HuffmanTree::buildCodeTable() c
     return codeTable;
 }
 
-void HuffmanTree::dump(SymbolStream &destination) {
+void HuffmanTree::dump(SymbolStreamInterface *destination) {
     std::vector<Symbol> leafs;
     std::vector<Symbol> codes;
     dumpSubtree(root, leafs, codes);
     // writing header entry - codes count
-    destination.writeSymbol(Symbol(codes.size(), 64));
+    destination->writeSymbol(Symbol(codes.size(), 64));
     // writing header entry - leafs count
     // writing codes
     for (auto code:codes) {
-        destination.writeSymbol(code);
+        destination->writeSymbol(code);
     }
     // writing leafs
     for(auto leaf: leafs) {
-        destination.writeSymbol(leaf);
+        destination->writeSymbol(leaf);
     }
 }
 
@@ -102,6 +103,6 @@ void HuffmanTree::dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> lea
     }
 }
 
-HuffmanTree::HuffmanTree(SymbolStream &dumpSource) {
+HuffmanTree::HuffmanTree(SymbolStreamInterface *dumpSource) {
     // todo implement me
 }
