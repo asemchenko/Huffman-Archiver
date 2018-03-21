@@ -7,15 +7,12 @@
 using testing::AtLeast;
 class MockSymbolStreamInterface: public SymbolStreamInterface{
 public:
-    //MOCK_METHOD1(writeSymbol, bool(Symbol s));
-    MOCK_METHOD0(good, bool());
+    MOCK_METHOD1(writeSymbol, bool(Symbol s));
     void open(const std::string &fileName, ioDirect streamDirection) override {}
 
     bool good() const override { return true;}
 
     Symbol readSymbol() override {return Symbol(0);}
-
-    bool writeSymbol(Symbol s) override {return true;}
 
     void seekg(size_t pos) override {}
 
@@ -36,7 +33,21 @@ TEST(HuffmanTreeTest, dumpTree) {
                              {Symbol(3), 1}
                      });
     MockSymbolStreamInterface stream;
-    EXPECT_CALL(stream, good()).Times(AtLeast(1));
-    stream.good();
-    //tree.dump(&stream);
+    {
+        // dummy object which says gmock that expects strict order of calls
+        ::testing::InSequence dummy;
+        // checking header-codes length
+        EXPECT_CALL(stream, writeSymbol(Symbol(7,64))).Times(1);
+        // checking leafs count
+        EXPECT_CALL(stream, writeSymbol(Symbol(4,64))).Times(1);
+        // tree codes by range DDDUUU
+        EXPECT_CALL(stream, writeSymbol(HuffmanTree::TREE_DUMP_DOWN_CODE)).Times(3); // D*3
+        EXPECT_CALL(stream, writeSymbol(HuffmanTree::TREE_DUMP_UP_CODE)).Times(4);
+        // leafs range - [2,3,1,0]
+        EXPECT_CALL(stream, writeSymbol(Symbol(2))).Times(1);
+        EXPECT_CALL(stream, writeSymbol(Symbol(3))).Times(1);
+        EXPECT_CALL(stream, writeSymbol(Symbol(1))).Times(1);
+        EXPECT_CALL(stream, writeSymbol(Symbol(0))).Times(1);
+    }
+    tree.dump(&stream);
 }

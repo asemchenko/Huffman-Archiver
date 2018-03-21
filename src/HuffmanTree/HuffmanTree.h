@@ -40,13 +40,16 @@ public:
         return root;
     }
     void dump(SymbolStreamInterface *destination);
+    // internal constants
+    static const Symbol TREE_DUMP_DOWN_CODE;
+    static const Symbol TREE_DUMP_UP_CODE;
 private:
     static bool cmp(const HuffmanTreeNode *a, const HuffmanTreeNode *b);
     void addToCodeTable(HuffmanTreeNode* root, Symbol s,
                        std::unordered_map<Symbol, Symbol, Symbol::Hash> &codeTable) const;
     std::vector<HuffmanTreeNode*>
     buildHeap(std::unordered_map<Symbol, uint64_t, Symbol::Hash> occurrence);
-    void dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> leafs, std::vector<Symbol> codes);
+    void dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> &leafs, std::vector<Symbol> &codes);
     HuffmanTreeNode *root;
     size_t symbolsCount;
 };

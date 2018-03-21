@@ -4,8 +4,8 @@
 #include <algorithm>
 #include "HuffmanTree.h"
 
-const Symbol TREE_DUMP_DOWN_CODE = Symbol(0, 1);
-const Symbol TREE_DUMP_UP_CODE = Symbol(1, 1);
+const Symbol HuffmanTree::TREE_DUMP_DOWN_CODE = Symbol(0, 1);
+const Symbol HuffmanTree::TREE_DUMP_UP_CODE = Symbol(1, 1);
 
 bool HuffmanTree::cmp(const HuffmanTreeNode *a, const HuffmanTreeNode *b) {
     return a->countOccur > b->countOccur;
@@ -32,7 +32,7 @@ HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash
         std::pop_heap(heap.begin(), heap.end(), cmp);
 
         heap.back() = new HuffmanTreeNode(l->countOccur + r->countOccur, l, r);
-        std::push_heap(heap.begin(), heap.end() - 1);
+        std::push_heap(heap.begin(), heap.end(), cmp);
     }
     root = heap.front();
 }
@@ -84,6 +84,7 @@ void HuffmanTree::dump(SymbolStreamInterface *destination) {
     // writing header entry - codes count
     destination->writeSymbol(Symbol(codes.size(), 64));
     // writing header entry - leafs count
+    destination->writeSymbol(Symbol(leafs.size(),64));
     // writing codes
     for (auto code:codes) {
         destination->writeSymbol(code);
@@ -94,7 +95,8 @@ void HuffmanTree::dump(SymbolStreamInterface *destination) {
     }
 }
 
-void HuffmanTree::dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> leafs, std::vector<Symbol> codes) {
+void HuffmanTree::dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> &leafs,
+                              std::vector<Symbol> &codes) {
     if (treeRoot->isLeaf) {
         leafs.push_back(treeRoot->symbol);
         codes.push_back(TREE_DUMP_UP_CODE);
@@ -106,5 +108,5 @@ void HuffmanTree::dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> lea
 }
 
 HuffmanTree::HuffmanTree(SymbolStreamInterface *dumpSource) {
-    // todo implement me
+    // TODO implement me
 }

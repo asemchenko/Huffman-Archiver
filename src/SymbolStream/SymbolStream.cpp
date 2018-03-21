@@ -4,7 +4,6 @@
 
 #include "SymbolStream.h"
 
-
 SymbolStream::SymbolStream(const std::string &fileName, ioDirect streamDirection) {
     open(fileName, streamDirection);
 }
