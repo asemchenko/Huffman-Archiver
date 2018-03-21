@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <unordered_map>
-#include "../HuffmanTreeNode/HuffmanTreeNode.h"
+#include "HuffmanTreeNode.h"
 #include "../SymbolStream/SymbolStreamInterface.h"
 #include <iostream>
 #include <iomanip>

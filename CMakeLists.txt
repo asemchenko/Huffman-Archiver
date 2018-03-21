@@ -21,7 +21,7 @@ endif ()
 add_executable(huffmanArchiver
         ${SOURCE_DIR}main.cpp
         ${SOURCE_DIR}SymbolStream/SymbolStream.cpp
-        ${SOURCE_DIR}Symbol/Symbol.cpp
+        ${SOURCE_DIR}SymbolStream/Symbol.cpp
         ${SOURCE_DIR}API.cpp
-        ${SOURCE_DIR}HuffmanTreeNode/HuffmanTreeNode.cpp
+        ${SOURCE_DIR}HuffmanTree/HuffmanTreeNode.cpp
         ${SOURCE_DIR}HuffmanTree/HuffmanTree.cpp)

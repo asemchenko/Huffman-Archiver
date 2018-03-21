@@ -5,7 +5,7 @@
 #ifndef HUFFMAN_ARCHIVER_SYMBOL_STREAM_INTERFACE_H
 #define HUFFMAN_ARCHIVER_SYMBOL_STREAM_INTERFACE_H
 
-#include "../Symbol/Symbol.h"
+#include "Symbol.h"
 class SymbolStreamInterface {
 public:
     enum ioDirect {
