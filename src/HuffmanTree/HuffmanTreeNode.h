@@ -6,7 +6,7 @@
 #define HUFFMAN_ARCHIVER_HUFFMAN_TREENODE_H
 
 
-#include "../Symbol/Symbol.h"
+#include "../SymbolStream/Symbol.h"
 class HuffmanTreeNode {
 public:
     // constructor creates non-leaf
