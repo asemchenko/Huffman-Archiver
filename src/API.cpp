@@ -39,6 +39,7 @@ bool compressFile(const std::string &inFilename, const std::string &outFilename)
     in.seekg(0); // rewind stream at the begin
     Symbol s = in.readSymbol();
     SymbolStream out(outFilename, SymbolStream::outStream);
+    tree.dump(&out);
     while (in.good()) {
         out.writeSymbol(codeTable[s]);
         s = in.readSymbol();
