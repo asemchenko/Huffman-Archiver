@@ -3,14 +3,16 @@
 //
 #include <algorithm>
 #include "HuffmanTree.h"
-const Symbol TREE_DUMP_DOWN_CODE = Symbol(0,1);
-const Symbol TREE_DUMP_UP_CODE = Symbol(1,1);
+
+const Symbol TREE_DUMP_DOWN_CODE = Symbol(0, 1);
+const Symbol TREE_DUMP_UP_CODE = Symbol(1, 1);
 
 bool HuffmanTree::cmp(const HuffmanTreeNode *a, const HuffmanTreeNode *b) {
     return a->countOccur > b->countOccur;
 }
-HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence):
-                                                                                root(nullptr) {
+
+HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash> &occurrence) :
+        root(nullptr) {
     // todo refactor lines below - create method for building tree
     symbolsCount = occurrence.size();
     if (symbolsCount == 1) {
@@ -30,7 +32,7 @@ HuffmanTree::HuffmanTree(const std::unordered_map<Symbol, uint64_t, Symbol::Hash
         std::pop_heap(heap.begin(), heap.end(), cmp);
 
         heap.back() = new HuffmanTreeNode(l->countOccur + r->countOccur, l, r);
-        std::push_heap(heap.begin(), heap.end()-1);
+        std::push_heap(heap.begin(), heap.end() - 1);
     }
     root = heap.front();
 }
@@ -54,8 +56,8 @@ HuffmanTree::~HuffmanTree() {
 }
 
 void HuffmanTree::addToCodeTable(HuffmanTreeNode *root, Symbol code,
-                            std::unordered_map<Symbol, Symbol, Symbol::Hash> &codeTable) const {
-    if(root->isLeaf) {
+                                 std::unordered_map<Symbol, Symbol, Symbol::Hash> &codeTable) const {
+    if (root->isLeaf) {
         codeTable.insert({root->symbol, code});
     } else {
         Symbol leftCode = code;
@@ -87,13 +89,13 @@ void HuffmanTree::dump(SymbolStreamInterface *destination) {
         destination->writeSymbol(code);
     }
     // writing leafs
-    for(auto leaf: leafs) {
+    for (auto leaf: leafs) {
         destination->writeSymbol(leaf);
     }
 }
 
 void HuffmanTree::dumpSubtree(HuffmanTreeNode *treeRoot, std::vector<Symbol> leafs, std::vector<Symbol> codes) {
-    if(treeRoot->isLeaf) {
+    if (treeRoot->isLeaf) {
         leafs.push_back(treeRoot->symbol);
         codes.push_back(TREE_DUMP_UP_CODE);
     } else {

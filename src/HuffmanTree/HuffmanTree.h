@@ -8,8 +8,7 @@
 #include <vector>
 #include <unordered_map>
 #include "../HuffmanTreeNode/HuffmanTreeNode.h"
-#include "../SymbolStream/SymbolStream.h"
-
+#include "../SymbolStream/SymbolStreamInterface.h"
 #include <iostream>
 #include <iomanip>
 class HuffmanTree {
