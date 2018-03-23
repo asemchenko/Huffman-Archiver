@@ -26,7 +26,7 @@ size_t Symbol::size() const {
     return bitSize;
 }
 
-uint8_t Symbol::popBits(size_t count) {
+uint8_t Symbol::popFrontBits(size_t count) {
     // count must be less or equal 8
     // Symbol.size() must be greater or equal count
     bitSize -= count;

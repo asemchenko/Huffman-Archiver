@@ -73,7 +73,7 @@ private:
     void dumpSubtree(Node *treeRoot,
                      std::vector<Symbol> &leafs,
                      std::vector<Symbol> &codes);
-
+    void buildTree(std::vector<Node*> &heap);
     Node *root;
     size_t symbolsCount;
 };

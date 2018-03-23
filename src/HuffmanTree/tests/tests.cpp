@@ -19,6 +19,8 @@ public:
     void flush() override {}
 
     void close() override {}
+
+    Symbol readSymbol(size_t bitSize) override {return Symbol(0);}
 };
 
 TEST(HuffmanTreeTest, singleByteConstruct) {

@@ -22,6 +22,8 @@ public:
 
     Symbol readByte() final;
 
+    Symbol readSymbol(size_t bitsCount) final;
+
     bool writeSymbol(Symbol s) final;
 
     void seekg(size_t pos) final;

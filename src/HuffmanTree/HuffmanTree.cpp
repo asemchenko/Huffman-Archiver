@@ -8,33 +8,19 @@ const Symbol HuffmanTree::TREE_DUMP_DOWN_CODE = Symbol(0, 1);
 const Symbol HuffmanTree::TREE_DUMP_UP_CODE = Symbol(1, 1);
 
 HuffmanTree::HuffmanTree(SymbolStreamInterface *dumpSource) {
-    // TODO implement me
+
 }
 
 HuffmanTree::HuffmanTree(const OccurrenceTable &occurrence) :
         root(nullptr) {
-    // todo refactor lines below - create method for building tree
     symbolsCount = occurrence.size();
     if (symbolsCount == 1) {
         // if file contains bytes with only one value
         // we can not build tree
         throw std::logic_error("Sorry, this file can not be compressed");
     }
-    // building tree
-    auto heap = buildHeap(occurrence);
-    int iterCount = static_cast<int>(heap.size()) - 1;
-    for (int i = 0; i < iterCount; ++i) {
-        Node *l = heap.front();
-        std::pop_heap(heap.begin(), heap.end(), cmp);
-        heap.pop_back();
-
-        Node *r = heap.front();
-        std::pop_heap(heap.begin(), heap.end(), cmp);
-
-        heap.back() = new Node(l->countOccur + r->countOccur, l, r);
-        std::push_heap(heap.begin(), heap.end(), cmp);
-    }
-    root = heap.front();
+    auto heap = buildHeap(occurrence); // putting symbols occurrence into heap
+    buildTree(heap);
 }
 
 bool HuffmanTree::cmp(const Node *a, const Node *b) {
@@ -51,6 +37,22 @@ HuffmanTree::buildHeap(OccurrenceTable occurrence) {
     }
     std::make_heap(nodes.begin(), nodes.end(), cmp);
     return nodes;
+}
+
+void HuffmanTree::buildTree(std::vector<Node *> &heap) {
+    int iterCount = static_cast<int>(heap.size()) - 1;
+    for (int i = 0; i < iterCount; ++i) {
+        Node *l = heap.front();
+        std::pop_heap(heap.begin(), heap.end(), cmp);
+        heap.pop_back();
+
+        Node *r = heap.front();
+        std::pop_heap(heap.begin(), heap.end(), cmp);
+
+        heap.back() = new Node(l->countOccur + r->countOccur, l, r);
+        std::push_heap(heap.begin(), heap.end(), cmp);
+    }
+    root = heap.front();
 }
 
 void HuffmanTree::addSubtreeCodes(Node *root,

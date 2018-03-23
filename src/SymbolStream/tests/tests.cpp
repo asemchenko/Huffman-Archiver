@@ -32,8 +32,9 @@ TEST(OutStreamTest, writingBits) {
     SymbolStream in("bits", SymbolStream::inStream);
     for (int k = 0; k < 63; ++k) {
         ASSERT_EQ(in.readByte().getCode(), 0xff);
-        ASSERT_TRUE(in.good());
     }
     in.readByte();
     ASSERT_FALSE(in.good());
 }
+
+// TODO write main test which checks writing and reading bits

@@ -20,13 +20,13 @@ public:
 
     uint64_t getCode() const;
 
-    bool operator==(const Symbol &s) const noexcept ;
+    bool operator==(const Symbol &s) const noexcept;
 
     void append(bool bit);
 
     size_t size() const;
 
-    uint8_t popBits(size_t count);
+    uint8_t popFrontBits(size_t count);
 
     std::string binaryRepresentation() const;
 

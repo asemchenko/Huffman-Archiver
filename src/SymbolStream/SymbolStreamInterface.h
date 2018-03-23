@@ -18,6 +18,8 @@ public:
 
     virtual Symbol readByte() = 0;
 
+    virtual Symbol readSymbol(size_t bitSize) = 0;
+
     virtual bool writeSymbol(Symbol s) = 0;
 
     virtual void seekg(size_t pos) = 0;
