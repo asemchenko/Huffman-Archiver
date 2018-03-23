@@ -13,7 +13,7 @@ TEST(InStreamTest, openingUnexistingFile) {
 TEST(InStreamTest, readingBits) {
     SymbolStream s("uniqBytes.bin", SymbolStream::inStream);
     for (int i = 0; i < 256; ++i) {
-        ASSERT_EQ(s.readSymbol().getCode(), i);
+        ASSERT_EQ(s.readByte().getCode(), i);
     }
 }
 
@@ -31,9 +31,9 @@ TEST(OutStreamTest, writingBits) {
     // must read 63 bytes 0xff
     SymbolStream in("bits", SymbolStream::inStream);
     for (int k = 0; k < 63; ++k) {
-        ASSERT_EQ(in.readSymbol().getCode(), 0xff);
+        ASSERT_EQ(in.readByte().getCode(), 0xff);
         ASSERT_TRUE(in.good());
     }
-    in.readSymbol();
+    in.readByte();
     ASSERT_FALSE(in.good());
 }

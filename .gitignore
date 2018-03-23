@@ -52,5 +52,5 @@ fabric.properties
 profile/*
 release/*
 # testFiles
-testUtils/*
-! testUtils/*.py
+src/testUtils/*
+! src/testUtils/*.py

@@ -12,7 +12,7 @@ public:
 
     bool good() const override { return true;}
 
-    Symbol readSymbol() override {return Symbol(0);}
+    Symbol readByte() override {return Symbol(0);}
 
     void seekg(size_t pos) override {}
 

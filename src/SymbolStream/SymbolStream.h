@@ -20,7 +20,7 @@ public:
 
     bool good() const final ;
 
-    Symbol readSymbol() final;
+    Symbol readByte() final;
 
     bool writeSymbol(Symbol s) final;
 

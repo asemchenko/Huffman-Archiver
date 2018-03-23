@@ -30,9 +30,8 @@ bool SymbolStream::good() const {
     return !feof(file) && !static_cast<bool>(ferror(file));
 }
 
-Symbol SymbolStream::readSymbol() {
+Symbol SymbolStream::readByte() {
     uint8_t s;
-    // potential problem - casting from uint8_t to char
     fread(&s, sizeof(uint8_t), 1, file);
     return Symbol(s);
 }

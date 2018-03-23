@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(huffmanTreeTest tests.cpp
         ../HuffmanTree.cpp
         ../../SymbolStream/Symbol.cpp
-        ../HuffmanTreeNode.cpp
+        ../Node.cpp
         ../../SymbolStream/SymbolStream.cpp)
 target_link_libraries(huffmanTreeTest ${GTEST_LIBRARIES} Threads::Threads gmock_main gmock)
 # copying data for tests

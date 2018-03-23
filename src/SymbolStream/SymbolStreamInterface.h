@@ -16,7 +16,7 @@ public:
 
     virtual bool good() const = 0;
 
-    virtual Symbol readSymbol() = 0;
+    virtual Symbol readByte() = 0;
 
     virtual bool writeSymbol(Symbol s) = 0;
 

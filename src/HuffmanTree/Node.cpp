@@ -2,9 +2,9 @@
 // Created by asem on 15.03.18.
 //
 
-#include "HuffmanTreeNode.h"
+#include "Node.h"
 
-HuffmanTreeNode::HuffmanTreeNode(uint64_t count, HuffmanTreeNode *left_, HuffmanTreeNode *right_) {
+Node::Node(uint64_t count, Node *left_, Node *right_) {
     countOccur = count;
     left = left_;
     right = right_;
@@ -12,7 +12,7 @@ HuffmanTreeNode::HuffmanTreeNode(uint64_t count, HuffmanTreeNode *left_, Huffman
     isLeaf = false;
 }
 
-HuffmanTreeNode::HuffmanTreeNode(Symbol symbol_, uint64_t count_) {
+Node::Node(Symbol symbol_, uint64_t count_) {
     symbol = symbol_;
     countOccur = count_;
     // this constructor creates leaf, so
@@ -21,7 +21,7 @@ HuffmanTreeNode::HuffmanTreeNode(Symbol symbol_, uint64_t count_) {
     right = nullptr;
 }
 
-HuffmanTreeNode::~HuffmanTreeNode() {
+Node::~Node() {
     delete left;
     delete right;
 }

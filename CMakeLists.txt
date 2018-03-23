@@ -23,5 +23,5 @@ add_executable(huffmanArchiver
         ${SOURCE_DIR}SymbolStream/SymbolStream.cpp
         ${SOURCE_DIR}SymbolStream/Symbol.cpp
         ${SOURCE_DIR}API.cpp
-        ${SOURCE_DIR}HuffmanTree/HuffmanTreeNode.cpp
+        ${SOURCE_DIR}HuffmanTree/Node.cpp
         ${SOURCE_DIR}HuffmanTree/HuffmanTree.cpp)
