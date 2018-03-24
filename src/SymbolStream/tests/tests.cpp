@@ -37,4 +37,33 @@ TEST(OutStreamTest, writingBits) {
     ASSERT_FALSE(in.good());
 }
 
-// TODO write main test which checks writing and reading bits
+TEST(StreamTest, ioTest) {
+    SymbolStreamInterface *stream = new SymbolStream("tmpTestFile.bin", SymbolStreamInterface::outStream);
+    for (int i = 0; i < 10; ++i) {
+        stream->writeSymbol(Symbol(0xaaaaaaaaaaaaaaaa, 64)); // writing 101010101...1010
+    }
+    stream->close();
+    delete stream;
+    stream =  new SymbolStream("tmpTestFile.bin", SymbolStreamInterface::inStream);
+    // check summary 2 bytes
+    ASSERT_EQ(stream->readSymbol(2), Symbol(0x2, 2));
+    ASSERT_EQ(stream->readSymbol(4), Symbol(0xa, 4));
+    ASSERT_EQ(stream->readSymbol(6), Symbol(0x2a, 6));
+    ASSERT_EQ(stream->readSymbol(4), Symbol(0xa, 4));
+    // check 4 bytes
+    uint64_t  expectedBit = 1;
+    for (int j = 0; j < 4*8; ++j) {
+        ASSERT_EQ(stream->readSymbol(1), Symbol(expectedBit,1));
+        expectedBit ^= 1;
+    }
+    // check one bit
+    ASSERT_EQ(stream->readSymbol(1), Symbol(1,1));
+    // check remained 73 byte and seven bits
+    for (int k = 0; k < 9; ++k) { // check 72 byte
+        ASSERT_EQ(stream->readSymbol(64), Symbol(0x5555555555555555, 64));
+    }
+    ASSERT_EQ(stream->readSymbol(8), Symbol(0x55,8)); // check one byte
+    ASSERT_EQ(stream->readSymbol(7), Symbol(0x2a, 7));
+    ASSERT_EQ(stream->readSymbol(1).size(), 0);
+    ASSERT_FALSE(stream->good());
+}

@@ -28,7 +28,9 @@ void SymbolStream::open(const std::string &fileName, SymbolStream::ioDirect stre
 }
 
 bool SymbolStream::good() const {
-    return !feof(file) && !static_cast<bool>(ferror(file));
+    bool eof = static_cast<bool>(feof(file));
+    bool err = static_cast<bool>(ferror(file));
+    return !eof && !err;
 }
 
 Symbol SymbolStream::readByte() {
@@ -81,11 +83,13 @@ void SymbolStream::close() {
 
 void SymbolStream::seekg(size_t pos) {
     clearerr(file);
-    fseek(file, 0, SEEK_SET);
+    fseek(file, pos, SEEK_SET);
+    if (!good()) {
+        throw std::runtime_error("Error during setting file seek");
+    }
 }
 
 Symbol SymbolStream::readSymbol(size_t bitsCount) {
-    // TODO check very careful this method
     uint64_t readedSymbol = 0;
     size_t readedSymbolSize = 0;
     if (bufferBitSize) { // firstly reads data from buffer
