@@ -10,6 +10,7 @@ const Symbol HuffmanTree::TREE_DUMP_UP_CODE = Symbol(1, 1);
 HuffmanTree::HuffmanTree(SymbolStreamInterface *dumpSource) {
     uint64_t codesCount = dumpSource->readSymbol(64).getCode();
     uint64_t leafsCount = dumpSource->readSymbol(64).getCode();
+    symbolsCount = leafsCount;
     if (!dumpSource->good()) {
         throw std::runtime_error("Error during reading header from stream");
     }
@@ -30,7 +31,11 @@ HuffmanTree::HuffmanTree(SymbolStreamInterface *dumpSource) {
         throw std::runtime_error("Error during reading header from stream");
     }
     // recovering tree from dump
-
+    root = new Node(0, nullptr, nullptr);
+    // TODO create special method and relocate there lines below
+    int currentCodeIndex = 0;
+    int currentLeafIndex = 0;
+    recover(root,codes,currentCodeIndex,leafs,currentLeafIndex);
 }
 
 HuffmanTree::HuffmanTree(const OccurrenceTable &occurrence) :
@@ -159,5 +164,25 @@ void HuffmanTree::recover(Node *root,
         root->setSymbol(leafs[currentLeafIndex]);
         ++currentLeafIndex;
         ++currentCodeIndex;
+    }
+}
+
+bool HuffmanTree::operator==(const HuffmanTree &other) {
+
+}
+
+bool HuffmanTree::checkSubtreeEqual(const Node *root1, const Node *root2) {
+    // check that root1 and root2 are both valid pointers or both nullptr
+    if (static_cast<bool>(root1) != static_cast<bool>(root2)) {
+        return false;
+    }
+    if (!root1) { // if root1 and root2 are both nullptr
+        return true;
+    }
+    if (root1->isLeaf_ && root2->isLeaf_) {
+        return root1->symbol == root2->symbol;
+    } else {
+        return checkSubtreeEqual(root1->left, root2->left)
+               && checkSubtreeEqual(root1->right, root1->right);
     }
 }

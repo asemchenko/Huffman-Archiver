@@ -29,8 +29,12 @@ size_t Symbol::size() const {
 uint8_t Symbol::popFrontBits(size_t count) {
     // count must be less or equal 8
     // Symbol.size() must be greater or equal count
+    uint8_t result = static_cast<uint8_t>(value >> (bitSize - count));
     bitSize -= count;
-    return static_cast<uint8_t >(value >> count);
+    // clearing trash bits at the high part of byte
+    result <<= 8-count;
+    result >>= 8-count;
+    return result;
 }
 
 std::string Symbol::binaryRepresentation() const {

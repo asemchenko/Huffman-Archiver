@@ -51,6 +51,7 @@ public:
     }
 
 #endif
+    bool operator == (const HuffmanTree &other);
 
     // export tree into file
     void dump(SymbolStreamInterface *destination);
@@ -81,6 +82,8 @@ private:
                  int &currentCodeIndex,
                  const std::vector<Symbol> &leafs,
                  int &currentLeafIndex);
+    // used in operator == (const HuffmanTree &other)
+    bool checkSubtreeEqual(const Node *root1, const Node* root2);
     Node *root;
     size_t symbolsCount;
 };

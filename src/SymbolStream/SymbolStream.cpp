@@ -62,7 +62,7 @@ void SymbolStream::flush() {
     if (direction == inStream) {
         throw std::logic_error("Attempt flushing input stream");
     }
-    else if (bufferBitSize) {
+    else {
         fflush(file);
     }
 }
@@ -73,7 +73,9 @@ SymbolStream::~SymbolStream() {
 
 void SymbolStream::close() {
     if (direction == outStream) {
-        flush();
+        if (bufferBitSize) {
+            fwrite(&buffer, sizeof(buffer), 1, file);
+        }
     }
     if (file) {
         fclose(file);
