@@ -40,7 +40,7 @@ public:
                 std::cout << std::setw(indent) << ' ';
             }
             if (p->right) std::cout << " /\n" << std::setw(indent) << ' ';
-            std::cout << (p->isLeaf ? p->symbol.getCode() : p->countOccur) << "\n ";
+            std::cout << (p->isLeaf_ ? p->symbol.getCode() : p->countOccur) << "\n ";
             if (p->left) {
                 std::cout << std::setw(indent) << ' ' << " \\\n";
                 l = postorder(p->left, indent + 6);
@@ -74,6 +74,13 @@ private:
                      std::vector<Symbol> &leafs,
                      std::vector<Symbol> &codes);
     void buildTree(std::vector<Node*> &heap);
+
+    // recover tree(used in creating tree from dump)
+    void recover(Node *root,
+                 const std::vector<Symbol> &codes,
+                 int &currentCodeIndex,
+                 const std::vector<Symbol> &leafs,
+                 int &currentLeafIndex);
     Node *root;
     size_t symbolsCount;
 };

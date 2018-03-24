@@ -15,6 +15,8 @@ public:
                                      Node *right_);
     // create leaf node
     Node(Symbol symbol_, uint64_t count_);
+    void setSymbol(Symbol s);
+    void setLeafFlag(bool isLeaf);
     ~Node();
     // preventing any copying
     Node(const Node &) = delete;
@@ -27,7 +29,7 @@ private:
     Node *right;
     Symbol symbol; // not empty only if node is leaf
     uint64_t countOccur;
-    bool isLeaf;
+    bool isLeaf_;
 };
 
 

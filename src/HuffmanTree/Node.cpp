@@ -9,14 +9,14 @@ Node::Node(uint64_t count, Node *left_, Node *right_) {
     left = left_;
     right = right_;
     // this constructor creates internal tree node, so
-    isLeaf = false;
+    isLeaf_ = false;
 }
 
 Node::Node(Symbol symbol_, uint64_t count_) {
     symbol = symbol_;
     countOccur = count_;
     // this constructor creates leaf, so
-    isLeaf = true;
+    isLeaf_ = true;
     left = nullptr;
     right = nullptr;
 }
@@ -24,4 +24,12 @@ Node::Node(Symbol symbol_, uint64_t count_) {
 Node::~Node() {
     delete left;
     delete right;
+}
+
+void Node::setSymbol(Symbol s) {
+    symbol = s;
+}
+
+void Node::setLeafFlag(bool isLeaf) {
+    isLeaf_ = isLeaf;
 }

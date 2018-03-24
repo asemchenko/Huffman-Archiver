@@ -8,6 +8,28 @@ const Symbol HuffmanTree::TREE_DUMP_DOWN_CODE = Symbol(0, 1);
 const Symbol HuffmanTree::TREE_DUMP_UP_CODE = Symbol(1, 1);
 
 HuffmanTree::HuffmanTree(SymbolStreamInterface *dumpSource) {
+    uint64_t codesCount = dumpSource->readSymbol(64).getCode();
+    uint64_t leafsCount = dumpSource->readSymbol(64).getCode();
+    if (!dumpSource->good()) {
+        throw std::runtime_error("Error during reading header from stream");
+    }
+    // TODO implement dumping/recovering tree with leaf size greater than 8
+    // reading leafs list
+    std::vector<Symbol> leafs;
+    leafs.reserve(leafsCount);
+    for (uint64_t i = 0; i < leafsCount; ++i) {
+        leafs.push_back(dumpSource->readSymbol(8));
+    }
+    // reading codes list
+    std::vector<Symbol> codes;
+    codes.reserve(codesCount);
+    for (uint64_t j = 0; j < codesCount; ++j) {
+        codes.push_back(dumpSource->readSymbol(1));
+    }
+    if (!dumpSource->good()) {
+        throw std::runtime_error("Error during reading header from stream");
+    }
+    // recovering tree from dump
 
 }
 
@@ -58,7 +80,7 @@ void HuffmanTree::buildTree(std::vector<Node *> &heap) {
 void HuffmanTree::addSubtreeCodes(Node *root,
                                   Symbol code,
                                   CodeTable codeTable) const {
-    if (root->isLeaf) {
+    if (root->isLeaf_) {
         codeTable.insert({root->symbol, code});
     } else {
         Symbol leftCode = code;
@@ -86,19 +108,19 @@ void HuffmanTree::dump(SymbolStreamInterface *destination) {
     destination->writeSymbol(Symbol(codes.size(), 64));
     // writing header entry - leafs count
     destination->writeSymbol(Symbol(leafs.size(), 64));
-    // writing codes
-    for (auto code:codes) {
-        destination->writeSymbol(code);
-    }
     // writing leafs
     for (auto leaf: leafs) {
         destination->writeSymbol(leaf);
+    }
+    // writing codes
+    for (auto code:codes) {
+        destination->writeSymbol(code);
     }
 }
 
 void HuffmanTree::dumpSubtree(Node *treeRoot, std::vector<Symbol> &leafs,
                               std::vector<Symbol> &codes) {
-    if (treeRoot->isLeaf) {
+    if (treeRoot->isLeaf_) {
         leafs.push_back(treeRoot->symbol);
         codes.push_back(TREE_DUMP_UP_CODE);
     } else {
@@ -111,5 +133,31 @@ void HuffmanTree::dumpSubtree(Node *treeRoot, std::vector<Symbol> &leafs,
 HuffmanTree::~HuffmanTree() {
     if (root) {
         delete root;
+    }
+}
+
+void HuffmanTree::recover(Node *root,
+                          const std::vector<Symbol> &codes,
+                          int &currentCodeIndex,
+                          const std::vector<Symbol> &leafs,
+                          int &currentLeafIndex) {
+    // TODO check that this method works correctly
+    if (currentCodeIndex >= codes.size()) {
+        throw std::logic_error("Dump was damaged");
+    }
+    if (codes[currentCodeIndex] == TREE_DUMP_DOWN_CODE) {
+        root->left = new Node(0, nullptr, nullptr);
+        ++currentCodeIndex;
+        recover(root->left, codes, currentCodeIndex, leafs, currentLeafIndex);
+        root->right = new Node(0, nullptr, nullptr);
+        recover(root->right, codes, currentCodeIndex, leafs, currentLeafIndex);
+    } else {
+        if (currentLeafIndex >= leafs.size()) {
+            throw std::logic_error("Dump was damaged");
+        }
+        root->setLeafFlag(true);
+        root->setSymbol(leafs[currentLeafIndex]);
+        ++currentLeafIndex;
+        ++currentCodeIndex;
     }
 }
