@@ -72,7 +72,7 @@ SymbolStream::~SymbolStream() {
 }
 
 void SymbolStream::close() {
-    if (direction == outStream) {
+    if (direction == outStream && file) {
         if (bufferBitSize) {
             fwrite(&buffer, sizeof(buffer), 1, file);
         }

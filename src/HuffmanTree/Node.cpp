@@ -33,3 +33,12 @@ void Node::setSymbol(Symbol s) {
 void Node::setLeafFlag(bool isLeaf) {
     isLeaf_ = isLeaf;
 }
+
+
+bool Node::isLeaf() {
+    return isLeaf_;
+}
+
+const Symbol & Node::getSymbol() {
+    return symbol;
+}

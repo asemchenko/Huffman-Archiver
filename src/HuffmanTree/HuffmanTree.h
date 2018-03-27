@@ -7,10 +7,10 @@
 
 #include <vector>
 #include <unordered_map>
-#include "Node.h"
-#include "../SymbolStream/SymbolStreamInterface.h"
 #include <iostream>
 #include <iomanip>
+#include "Node.h"
+#include "../SymbolStream/SymbolStreamInterface.h"
 
 using CodeTable = std::unordered_map<Symbol, Symbol, Symbol::Hash>;
 using OccurrenceTable = std::unordered_map<Symbol, uint64_t, Symbol::Hash>;
@@ -61,6 +61,7 @@ public:
     // internal constants
     static const Symbol TREE_DUMP_DOWN_CODE;
     static const Symbol TREE_DUMP_UP_CODE;
+    friend class Decoder;
 private:
     static bool cmp(const Node *a, const Node *b);
 
@@ -87,6 +88,5 @@ private:
     Node *root;
     size_t symbolsCount;
 };
-
 
 #endif //HUFFMAN_ARCHIVER_HUFFMAN_TREE_H

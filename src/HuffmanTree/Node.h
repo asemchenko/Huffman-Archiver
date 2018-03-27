@@ -17,6 +17,8 @@ public:
     Node(Symbol symbol_, uint64_t count_);
     void setSymbol(Symbol s);
     void setLeafFlag(bool isLeaf);
+    bool isLeaf();
+    const Symbol & getSymbol();
     ~Node();
     // preventing any copying
     Node(const Node &) = delete;
@@ -24,6 +26,7 @@ public:
     void operator = (Node &) = delete;
     void operator = (Node &&) = delete;
     friend class HuffmanTree;
+    friend class Decoder;
 private:
     Node *left;
     Node *right;

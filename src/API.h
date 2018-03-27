@@ -9,6 +9,10 @@
 #include <iostream>
 #include "SymbolStream/SymbolStream.h"
 
-bool compressFile(const std::string &inFilename, const std::string &outFilename);
+bool compressFile(const std::string &inFilename,
+                  const std::string &outFilename);
+
+bool decompressFile(const std::string &inFilename,
+                    const std::string &outFilename);
 
 #endif //HUFFMAN_ARCHIVER_API_H

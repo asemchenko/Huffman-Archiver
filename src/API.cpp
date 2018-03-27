@@ -6,6 +6,7 @@
 #include <vector>
 #include "API.h"
 #include "HuffmanTree/HuffmanTree.h"
+#include "Decoder/Decoder.h"
 using std::unordered_map;
 
 static unordered_map<Symbol, uint64_t, Symbol::Hash> symbolsOccurrence(SymbolStream &stream) {
@@ -37,12 +38,23 @@ bool compressFile(const std::string &inFilename, const std::string &outFilename)
     }
 #endif
     in.seekg(0); // rewind stream at the begin
-    Symbol s = in.readByte();
     SymbolStream out(outFilename, SymbolStream::outStream);
     tree.dump(&out);
+    Symbol s = in.readByte();
     while (in.good()) {
         out.writeSymbol(codeTable[s]);
         s = in.readByte();
     }
+    // TODO catch exceptions and return false if error occurred
+    return true;
+}
+
+bool decompressFile(const std::string &inFilename,
+                    const std::string &outFilename) {
+    SymbolStreamInterface *inStream = new SymbolStream(inFilename, SymbolStreamInterface::inStream);
+    SymbolStreamInterface *outStream = new SymbolStream(outFilename, SymbolStreamInterface::outStream);
+    HuffmanTree codeTree(inStream);
+    Decoder decoder(inStream, outStream, &codeTree);
+    decoder.decode();
     return true;
 }

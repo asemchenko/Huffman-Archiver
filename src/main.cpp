@@ -3,26 +3,31 @@
 
 #include "SymbolStream/SymbolStream.h"
 
+void printErrorUsage() {
+    std::cerr << "Usage: <option> <inputFilename> <outputFilename>" << std::endl;
+}
+
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        std::cerr << "Usage: <inputFilename> <outputFilename>" << std::endl;
+    if (argc != 4) {
+        printErrorUsage();
         return 1;
     }
-    SymbolStreamInterface *stream;
     try {
-        //compressFile(argv[1], argv[2]);
-        stream = new SymbolStream(argv[1], SymbolStreamInterface::inStream);
-        size_t i = 1;
-        Symbol s = stream->readSymbol(i);
-        while (stream->good()) {
-            std::cout << s.binaryRepresentation();
-            ++i;
-            s = stream->readSymbol(i);
+        if (std::string(argv[1]) == "-c") { // if compress option selected
+            compressFile(argv[2], argv[3]);
+        } else if (std::string(argv[1]) == "-d") { // if decompress option selected
+            decompressFile(argv[2], argv[3]);
+        } else {
+            printErrorUsage();
+            return 1;
         }
-        std::cout << s.binaryRepresentation() << std::endl;
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
+        return 1;
+    } catch (...) {
+        // :)
+        std::cerr << "Unexpected error occurred. Terminating ..." << std::endl;
+        return 1;
     }
-    delete stream;
     return 0;
 }
