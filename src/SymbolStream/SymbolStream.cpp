@@ -25,6 +25,9 @@ void SymbolStream::open(const std::string &fileName, SymbolStream::ioDirect stre
     if (!file || ferror(file)) {
         throw std::runtime_error("Can not open file " + fileName);
     }
+    fseek(file, 0, SEEK_END);
+    fileSize_ = ftell(file);
+    fseek(file, 0, SEEK_SET);
 }
 
 bool SymbolStream::good() const {
@@ -72,7 +75,7 @@ SymbolStream::~SymbolStream() {
 }
 
 void SymbolStream::close() {
-    if (direction == outStream) {
+    if (direction == outStream && file) {
         if (bufferBitSize) {
             fwrite(&buffer, sizeof(buffer), 1, file);
         }
@@ -96,7 +99,7 @@ Symbol SymbolStream::readSymbol(size_t bitsCount) {
     size_t readedSymbolSize = 0;
     if (bufferBitSize) { // firstly reads data from buffer
         size_t countBitsFromBuffer = std::min(bitsCount, bufferBitSize);
-        readedSymbol = buffer >> 8 - countBitsFromBuffer;
+        readedSymbol = buffer >> (8 - countBitsFromBuffer);
         buffer <<= countBitsFromBuffer;
         bufferBitSize -= countBitsFromBuffer;
         bitsCount -= countBitsFromBuffer;
@@ -121,10 +124,14 @@ Symbol SymbolStream::readSymbol(size_t bitsCount) {
     }
     if (bitsCount) {
         readedSymbol <<= bitsCount;
-        readedSymbol |= buffer >> 8-bitsCount;
+        readedSymbol |= buffer >> (8-bitsCount);
         readedSymbolSize += bitsCount;
         buffer <<= bitsCount;
         bufferBitSize -= bitsCount;
     }
     return Symbol(readedSymbol, readedSymbolSize);
+}
+
+long SymbolStream::fileSize() {
+    return fileSize_;
 }

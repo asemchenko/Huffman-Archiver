@@ -19,6 +19,8 @@ public:
 
     void flush() override {}
 
+    long fileSize() override {return 0;}
+
     void close() override {}
 
     Symbol readSymbol(size_t bitSize) override {return Symbol(0);}
