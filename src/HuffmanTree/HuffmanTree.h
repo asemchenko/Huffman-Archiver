@@ -66,7 +66,7 @@ private:
     static bool cmp(const Node *a, const Node *b);
 
     // recursively build code table
-    void addSubtreeCodes(Node *root, Symbol s, CodeTable codeTable) const;
+    void addSubtreeCodes(Node *root, Symbol s, CodeTable &codeTable) const;
 
     // used to build tree from symbol occurrence table
     std::vector<Node *> buildHeap(OccurrenceTable occurrence);

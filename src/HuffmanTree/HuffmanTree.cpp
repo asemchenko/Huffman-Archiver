@@ -84,7 +84,7 @@ void HuffmanTree::buildTree(std::vector<Node *> &heap) {
 
 void HuffmanTree::addSubtreeCodes(Node *root,
                                   Symbol code,
-                                  CodeTable codeTable) const {
+                                  CodeTable &codeTable) const {
     if (root->isLeaf_) {
         codeTable.insert({root->symbol, code});
     } else {
@@ -168,7 +168,7 @@ void HuffmanTree::recover(Node *root,
 }
 
 bool HuffmanTree::operator==(const HuffmanTree &other) {
-
+    return checkSubtreeEqual(root, other.root);
 }
 
 bool HuffmanTree::checkSubtreeEqual(const Node *root1, const Node *root2) {
@@ -183,6 +183,6 @@ bool HuffmanTree::checkSubtreeEqual(const Node *root1, const Node *root2) {
         return root1->symbol == root2->symbol;
     } else {
         return checkSubtreeEqual(root1->left, root2->left)
-               && checkSubtreeEqual(root1->right, root1->right);
+               && checkSubtreeEqual(root1->right, root2->right);
     }
 }

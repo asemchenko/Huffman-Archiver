@@ -28,18 +28,25 @@ bool compressFile(const std::string &inFilename, const std::string &outFilename)
     HuffmanTree tree(occurrence);
     auto codeTable = tree.buildCodeTable();
 #ifdef DEBUG
+    printf("============ Symbols frequency ======================\n");
     for (const auto &i : occurrence) {
         printf("Symbol %u: %lu\n", static_cast<unsigned>(i.first.getCode()), i.second);
     }
     //int height = tree.postorder(tree.getRoot(), 0);
     //std::cout << "Tree height: " << height-1 << std::endl;
+    printf("============ Symbols codes ======================\n");
     for (auto &i : codeTable) {
-        std::cout << "Symbol " << i.first.getCode() << " has code " << i.second.binaryRepresentation() << std::endl;
+        std::cout << "Symbol 0x" << std::hex << i.first.getCode() << " has code " << i.second.binaryRepresentation() << std::endl;
     }
 #endif
     in.seekg(0); // rewind stream at the begin
     SymbolStream out(outFilename, SymbolStream::outStream);
     tree.dump(&out);
+    auto countSymbolsInOutFile = static_cast<uint64_t>(in.fileSize());
+    out.writeSymbol(Symbol(countSymbolsInOutFile, 64));
+#ifdef DEBUG
+    printf("FILE SIZE: %ld\n", countSymbolsInOutFile);
+#endif
     Symbol s = in.readByte();
     while (in.good()) {
         out.writeSymbol(codeTable[s]);

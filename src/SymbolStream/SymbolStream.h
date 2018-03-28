@@ -31,6 +31,8 @@ public:
     void flush() final;
     
     void close() final;
+
+    long fileSize() final;
     
     ~SymbolStream() final;
 
@@ -43,6 +45,7 @@ private:
     FILE *file;
     uint8_t buffer;
     size_t bufferBitSize;
+    long fileSize_;
 };
 
 

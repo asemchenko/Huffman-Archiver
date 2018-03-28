@@ -13,18 +13,19 @@ Decoder::Decoder(SymbolStreamInterface *inStream,
 }
 
 void Decoder::decode() {
+    uint64_t symbolsCount = inStream_->readSymbol(64).getCode();
     Symbol s = inStream_->readSymbol(1);
     Node *curNode = codeTree_->root;
-    while (inStream_->good()) {
+    while (inStream_->good() && symbolsCount) {
         if (curNode->isLeaf()) {
             outStream_->writeSymbol(curNode->getSymbol());
+            --symbolsCount;
             curNode = codeTree_->root;
-        } else {
-            curNode = (s.getCode()==1?curNode->right:curNode->left);
         }
+        curNode = (s.getCode()==1?curNode->right:curNode->left);
         s = inStream_->readSymbol(1);
     }
-    if (curNode->isLeaf()) {
+    if (curNode->isLeaf() && symbolsCount) {
         outStream_->writeSymbol(curNode->getSymbol());
     }
 }

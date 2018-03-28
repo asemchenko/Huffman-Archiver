@@ -28,6 +28,8 @@ public:
 
     virtual void close() = 0;
 
+    virtual long fileSize() = 0;
+
     virtual ~SymbolStreamInterface() = default;
 };
 #endif //HUFFMAN_ARCHIVER_SYMBOL_STREAM_INTERFACE_H
